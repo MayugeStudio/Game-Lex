@@ -1,4 +1,4 @@
-![Logo](./assets/game-lex-logo.png)
+![Logo](./assets/game-lex-logo.svg)
 
 # Game Lex (GLEX)
 This language is intended to be used by students who are interested in programming.
