@@ -1,0 +1,11 @@
+cmake-build-debug/
+cmake-build-debug-event-trace/
+
+# Ignore config of editor
+.idea/
+
+# Ignore Memo Files.
+*.memo
+
+# Ignore .glb
+*.glb
