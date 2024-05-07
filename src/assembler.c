@@ -1,7 +1,3 @@
-//
-// Created by eyebrow on 2024/05/07.
-//
-
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -73,23 +69,21 @@ Inst GLX_parse_line(GLX_text line)
 {
     line = text_trim_left(line);
     GLX_text inst_name = text_chop_by_delim(&line, ' ');
+    GLX_text operand = text_trim(text_chop_by_delim(&line, '#'));
     if (text_eq(inst_name, text_cstr_as_text("push"))) {
         line = text_trim(line);
-        int operand = text_to_int(line);
-        return (Inst){ .type = INST_PUSH, .operand = operand };
+        return (Inst){ .type = INST_PUSH, .operand = text_to_int(operand) };
     }
     else if (text_eq(inst_name, text_cstr_as_text("dup"))) {
         line = text_trim(line);
-        int operand = text_to_int(line);
-        return (Inst){ .type = INST_DUP, .operand = operand };
+        return (Inst){ .type = INST_DUP, .operand = text_to_int(operand) };
     }
     else if (text_eq(inst_name, text_cstr_as_text("plus"))) {
         return (Inst){ .type = INST_PLUS };
     }
     else if (text_eq(inst_name, text_cstr_as_text("jmp"))) {
         line = text_trim(line);
-        int operand = text_to_int(line);
-        return (Inst){ .type = INST_JMP, .operand = operand };
+        return (Inst){ .type = INST_JMP, .operand = text_to_int(operand) };
     }
     else if (text_eq(inst_name, text_cstr_as_text("halt"))) {
         return (Inst){ .type = INST_HALT };
@@ -106,7 +100,7 @@ size_t GLX_parse_source(GLX_text source, Inst *program, size_t program_capacity)
     while (source.count > 0) {
         assert(program_size < program_capacity);
         GLX_text line = text_trim(text_chop_by_delim(&source, '\n'));
-        if (line.count > 0) {
+        if (line.count > 0 && *line.data != '#') {
             program[program_size] = GLX_parse_line(line);
             program_size += 1;
         }
