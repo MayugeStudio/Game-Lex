@@ -91,6 +91,9 @@ Inst GLX_parse_line(GLX_text line)
         int operand = text_to_int(line);
         return (Inst){ .type = INST_JMP, .operand = operand };
     }
+    else if (text_eq(inst_name, text_cstr_as_text("halt"))) {
+        return (Inst){ .type = INST_HALT };
+    }
     else {
         fprintf(stderr, "ERROR: unknown instruction `%.*s`\n", (int)inst_name.count, inst_name.data);
         exit(1);
