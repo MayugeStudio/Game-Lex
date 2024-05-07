@@ -1,6 +1,12 @@
 cmake-build-debug/
 cmake-build-debug-event-trace/
 
+# static library file
+*.a
+
+# excutable file
+*.exe
+
 # Ignore config of editor
 .idea/
 
