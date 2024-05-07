@@ -3,9 +3,8 @@ project(GameLex C)
 
 set(CMAKE_C_STANDARD 11)
 
-set(GLX_COMMON_SOURCES ./src/text.c ./src/glex.c
-        src/shift.h
-        src/shift.c)
+set(GLX_COMMON_SOURCES ./src/text.c ./src/glex.c ./src/shift_arg.c)
+
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 add_library(GLX_COMMON_LIB ${GLX_COMMON_SOURCES})
 

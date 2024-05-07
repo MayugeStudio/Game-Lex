@@ -1,5 +1,5 @@
 #include <assert.h>
-#include "shift.h"
+#include "shift_arg.h"
 
 char *shift_arg(int *argc, char ***argv)
 {
