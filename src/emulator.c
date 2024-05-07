@@ -158,7 +158,6 @@ Err GLEX_execute_inst(GLX_vm *vm)
 
 void GLX_dump_stack(FILE *stream, GLX_vm *gm)
 {
-    fprintf(stream, "STACK: size = %zu, ip = %lld\n", gm->stack_size, gm->ip);
     if (gm->stack_size > 0) {
         for (Word i = 0; i < gm->stack_size; ++i) {
             fprintf(stream, "  %lld\n", gm->stack[i]);
