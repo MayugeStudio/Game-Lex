@@ -3,6 +3,8 @@ project(GameLex C)
 
 set(CMAKE_C_STANDARD 11)
 
+set(GLEX_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
 set(GLX_COMMON_SOURCES ./src/text.c ./src/glex.c ./src/shift_arg.c)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}/lib)
@@ -19,5 +21,7 @@ target_sources(gle PRIVATE ./src/gle.c ./src/emulator.c)
 
 target_link_libraries(gla PRIVATE GLX_COMMON_LIB)
 target_link_libraries(gle PRIVATE GLX_COMMON_LIB)
+
+enable_testing()
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples)
