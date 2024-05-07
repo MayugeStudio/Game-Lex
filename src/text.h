@@ -1,7 +1,3 @@
-//
-// Created by eyebrow on 2024/05/06.
-//
-
 #ifndef TEXT_H
 #define TEXT_H
 

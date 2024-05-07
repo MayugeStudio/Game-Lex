@@ -1,7 +1,3 @@
-//
-// Created by eyebrow on 2024/05/07.
-//
-
 #ifndef GLEX_H
 #define GLEX_H
 
