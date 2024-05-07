@@ -40,14 +40,12 @@ int main(int argc, char **argv)
     }
 
     GLX_load_bytecode(&vm, input_file_path);
-    for (int i = 0; i < GLX_EXECUTION_LIMIT && !vm.halt; ++i) {
-        Err err = GLEX_execute_inst(&vm);
-        GLX_dump_stack(stdout, &vm);
-        if (err != ERR_OK) {
-            usage(stderr, program);
-            fprintf(stderr, "ERROR: %s", err_as_cstr(err));
-            exit(1);
-        }
+    Err err = GLX_execute_program(&vm, GLX_EXECUTION_LIMIT);
+    if (err != ERR_OK) {
+        usage(stderr, program);
+        fprintf(stderr, "ERROR: %s", err_as_cstr(err));
+        exit(1);
     }
+    GLX_dump_stack(stdout, &vm);
     return 0;
 }

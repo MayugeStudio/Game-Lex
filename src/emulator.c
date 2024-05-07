@@ -156,6 +156,21 @@ Err GLEX_execute_inst(GLX_vm *vm)
     return ERR_OK;
 }
 
+Err GLX_execute_program(GLX_vm *vm, int limit)
+{
+    while (limit > 0 && !vm->halt) {
+        Err err = GLEX_execute_inst(vm);
+        if (err != ERR_OK) {
+            return err;
+        }
+
+        if (limit > 0) {
+            limit -= 1;
+        }
+    }
+    return ERR_OK;
+}
+
 void GLX_dump_stack(FILE *stream, GLX_vm *gm)
 {
     if (gm->stack_size > 0) {
