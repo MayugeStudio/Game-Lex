@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "emulator.h"
-#include "shift.h"
+#include "shift_arg.h"
 
 GLX_vm vm = { 0 };
 
