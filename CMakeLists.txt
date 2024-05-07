@@ -19,3 +19,5 @@ target_sources(gle PRIVATE ./src/gle.c ./src/emulator.c)
 
 target_link_libraries(gla PRIVATE GLX_COMMON_LIB)
 target_link_libraries(gle PRIVATE GLX_COMMON_LIB)
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples)
