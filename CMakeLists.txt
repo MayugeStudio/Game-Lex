@@ -12,14 +12,11 @@ add_library(GLX_COMMON_LIB ${GLX_COMMON_SOURCES})
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wswitch-enum -pedantic -std=c11 -ggdb")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-add_executable(GLX_ASSEMBLER)
-add_executable(GLX_EMULATOR)
+add_executable(gla)
 add_executable(gle)
 
-target_sources(GLX_ASSEMBLER PRIVATE ./src/glc.c ./src/assembler.c)
-target_sources(GLX_EMULATOR PRIVATE ./src/gle.c ./src/emulator.c)
+target_sources(gla PRIVATE ./src/glc.c ./src/assembler.c)
 target_sources(gle PRIVATE ./src/gle.c ./src/emulator.c)
 
-target_link_libraries(GLX_ASSEMBLER PUBLIC GLX_COMMON_LIB)
-target_link_libraries(GLX_EMULATOR PUBLIC GLX_COMMON_LIB)
+target_link_libraries(gla PRIVATE GLX_COMMON_LIB)
 target_link_libraries(gle PRIVATE GLX_COMMON_LIB)
