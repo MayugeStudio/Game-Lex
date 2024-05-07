@@ -158,12 +158,11 @@ Err GLX_execute_inst(GLX_vm *vm)
 
 Err GLX_execute_program(GLX_vm *vm, int limit)
 {
-    while (limit > 0 && !vm->halt) {
+    while (limit != 0 && !vm->halt) {
         Err err = GLX_execute_inst(vm);
         if (err != ERR_OK) {
             return err;
         }
-
         if (limit > 0) {
             limit -= 1;
         }
@@ -173,6 +172,7 @@ Err GLX_execute_program(GLX_vm *vm, int limit)
 
 void GLX_dump_stack(FILE *stream, GLX_vm *gm)
 {
+    fprintf(stream, "[STACK]:\n");
     if (gm->stack_size > 0) {
         for (Word i = 0; i < gm->stack_size; ++i) {
             fprintf(stream, "  %lld\n", gm->stack[i]);
