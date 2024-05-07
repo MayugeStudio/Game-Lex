@@ -39,7 +39,7 @@ void GLX_load_bytecode(GLX_vm *gm, const char *file_path)
     fclose(f);
 }
 
-Err GLEX_execute_inst(GLX_vm *vm)
+Err GLX_execute_inst(GLX_vm *vm)
 {
     if (vm->ip < 0 || vm->ip >= vm->program_size) {
         return ERR_ILLEGAL_INST_ACCESS;
@@ -159,7 +159,7 @@ Err GLEX_execute_inst(GLX_vm *vm)
 Err GLX_execute_program(GLX_vm *vm, int limit)
 {
     while (limit > 0 && !vm->halt) {
-        Err err = GLEX_execute_inst(vm);
+        Err err = GLX_execute_inst(vm);
         if (err != ERR_OK) {
             return err;
         }
