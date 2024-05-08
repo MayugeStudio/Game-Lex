@@ -1,7 +1,7 @@
 enable_testing()
 
-set(EXAMPLE_1_ASM ${GLEX_DIR}/examples/123.gla)
-set(EXAMPLE_1_BIN ${GLEX_DIR}/examples/123.glb)
+set(EXAMPLE_1_ASM ${GLEX_DIR}/examples/1_123.gla)
+set(EXAMPLE_1_BIN ${GLEX_DIR}/examples/1_123.glb)
 set(EXAMPLE_1 ${EXAMPLE_1_ASM} ${EXAMPLE_1_BIN})
 
 set(EXAMPLE_2_ASM ${GLEX_DIR}/examples/2_comments.gla)
