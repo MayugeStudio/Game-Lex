@@ -77,6 +77,7 @@ int text_eq(GLX_text a, GLX_text b) {
     if (a.count != b.count) {
         return 0;
     } else {
+        // TODO: Can't handle a = {data = loop, count = 4}, b = {data = loop:, count = 4} pattern
         return memcmp(a.data, b.data, a.count) == 0;
     }
 }
