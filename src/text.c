@@ -13,7 +13,7 @@ GLX_text text_cstr_as_text(const char *cstr) {
 
 GLX_text text_trim_left(GLX_text text) {
     size_t i = 0;
-    while (i < text.count && isspace(*text.data)) {
+    while (i < text.count && isspace(text.data[i])) {
         i += 1;
     }
 
