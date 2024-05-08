@@ -2,10 +2,13 @@
 #define GLEX_H
 
 #include <stdint.h>
+#include "text.h"
 
 #define GLX_STACK_CAPACITY 1024
 #define GLX_PROGRAM_CAPACITY 1024
 #define GLX_EXECUTION_LIMIT 50
+#define GLX_LABEL_CAPACITY 1024
+#define DEFERRED_OPERANDS_CAPACITY 1024
 
 typedef int64_t Word;
 
@@ -28,7 +31,7 @@ typedef enum Inst_Type
 typedef struct Inst
 {
     Inst_Type type;
-    int operand;
+    Word operand;
 } Inst;
 
 typedef struct GamVM
@@ -52,6 +55,31 @@ typedef enum Err
     ERR_ILLEGAL_INST_ACCESS,
     ERR_ILLEGAL_OPERAND,
 } Err;
+
+typedef struct
+{
+    GLX_text name;
+    Word addr;
+} Label;
+
+typedef struct
+{
+    Word addr;
+    GLX_text label;
+} Declared_Addr;
+
+typedef struct
+{
+    Label labels[GLX_LABEL_CAPACITY];
+    size_t labels_size;
+
+    Declared_Addr declared_addresses[DEFERRED_OPERANDS_CAPACITY];
+    size_t declared_addresses_size;
+} Gasm;
+
+Word gasm_find_label_addr(const Gasm *gasm, GLX_text name);
+void gasm_push_label(Gasm *gasm, GLX_text name, Word addr);
+void gasm_push_declared_addr(Gasm *gasm, Word addr, GLX_text label);
 
 const char *err_as_cstr(Err err);
 

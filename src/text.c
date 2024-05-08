@@ -13,7 +13,7 @@ GLX_text text_cstr_as_text(const char *cstr) {
 
 GLX_text text_trim_left(GLX_text text) {
     size_t i = 0;
-    while (i < text.count && isspace(*text.data)) {
+    while (i < text.count && isspace(text.data[i])) {
         i += 1;
     }
 
@@ -77,6 +77,7 @@ int text_eq(GLX_text a, GLX_text b) {
     if (a.count != b.count) {
         return 0;
     } else {
+        // TODO: Can't handle a = {data = loop, count = 4}, b = {data = loop:, count = 4} pattern
         return memcmp(a.data, b.data, a.count) == 0;
     }
 }
