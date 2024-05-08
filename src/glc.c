@@ -5,6 +5,8 @@
 
 GLX_vm vm = { 0 };
 
+Gasm lasm = { 0 };
+
 int main(int argc, char **argv)
 {
     const char *program_name = argv[0];
@@ -19,9 +21,7 @@ int main(int argc, char **argv)
 
     GLX_text source = GLX_load_source_code(input_file_path);
 
-    vm.program_size = (Word)GLX_parse_source(source, vm.program, GLX_PROGRAM_CAPACITY);
-
+    GLX_parse_source_into_instructions(&vm, &lasm, source);
     GLX_save_program_as_bytecode(vm.program, vm.program_size, output_file_path);
-
     return 0;
 }

@@ -1,5 +1,31 @@
 #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "glex.h"
+
+Word gasm_find_label_addr(const Gasm *gasm, GLX_text name)
+{
+    for (size_t i = 0; i < gasm->labels_size; ++i) {
+        if (text_eq(name, gasm->labels[i].name)) {
+            return gasm->labels[i].addr;
+        }
+    }
+    fprintf(stderr, "ERROR: label `%.*s` does not exists\n", (int) name.count, name.data);
+    exit(1);
+}
+void gasm_push_label(Gasm *gasm, const GLX_text name, const Word addr)
+{
+    assert(gasm->labels_size < GLX_LABEL_CAPACITY);
+    gasm->labels[gasm->labels_size] = (Label) { .name = name, .addr = addr };
+    gasm->labels_size += 1;
+}
+
+void gasm_push_deferred_operand(Gasm *gasm, const Word addr, const GLX_text label)
+{
+    assert(gasm->deferred_operands_size < DEFERRED_OPERANDS_CAPACITY);
+    gasm->deferred_operands[gasm->deferred_operands_size] = (Deferred_Operand) { .addr = addr, .label = label };
+    gasm->deferred_operands_size += 1;
+}
 
 const char *err_as_cstr(Err err)
 {
