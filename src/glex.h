@@ -44,7 +44,7 @@ typedef struct GamVM
 
     int halt;
     Word program_size;
-} GLX_vm;
+} Gvm;
 typedef enum Err
 {
     ERR_OK = 0,

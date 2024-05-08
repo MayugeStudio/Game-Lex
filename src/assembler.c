@@ -65,11 +65,11 @@ GLX_text GLX_load_source_code(const char *file_path)
     };
 }
 
-void GLX_parse_source_into_instructions(GLX_vm *vm, Gasm *gasm, GLX_text source)
+void GLX_parse_source_into_instructions(Gvm *gvm, Gasm *gasm, GLX_text source)
 {
-    vm->program_size = 0;
+    gvm->program_size = 0;
     while (source.count > 0) {
-        assert(vm->program_size < GLX_PROGRAM_CAPACITY);
+        assert(gvm->program_size < GLX_PROGRAM_CAPACITY);
         GLX_text line = text_trim(text_chop_by_delim(&source, '\n'));
 
         if (line.count > 0 && *line.data != '#') {
@@ -81,41 +81,41 @@ void GLX_parse_source_into_instructions(GLX_vm *vm, Gasm *gasm, GLX_text source)
                     .count = inst_name.count - 1,
                     .data = inst_name.data,
                 };
-                gasm_push_label(gasm, label, vm->program_size);
+                gasm_push_label(gasm, label, gvm->program_size);
             }
             else if (text_eq(inst_name, text_cstr_as_text("push"))) {
                 line = text_trim(line);
-                vm->program[vm->program_size] = (Inst) {
+                gvm->program[gvm->program_size] = (Inst) {
                     .type = INST_PUSH,
                     .operand = text_to_int(operand)
                 };
-                vm->program_size += 1;
+                gvm->program_size += 1;
             }
             else if (text_eq(inst_name, text_cstr_as_text("dup"))) {
-                vm->program[vm->program_size] = (Inst) {
+                gvm->program[gvm->program_size] = (Inst) {
                     .type = INST_DUP,
                     .operand = text_to_int(operand)
                 };
-                vm->program_size += 1;
+                gvm->program_size += 1;
             }
             else if (text_eq(inst_name, text_cstr_as_text("plus"))) {
-                vm->program[vm->program_size] = (Inst) {
+                gvm->program[gvm->program_size] = (Inst) {
                     .type = INST_PLUS
                 };
-                vm->program_size += 1;
+                gvm->program_size += 1;
             }
             else if (text_eq(inst_name, text_cstr_as_text("jmp"))) {
-                gasm_push_declared_addr(gasm, vm->program_size, operand);
-                vm->program[vm->program_size] = (Inst) {
+                gasm_push_declared_addr(gasm, gvm->program_size, operand);
+                gvm->program[gvm->program_size] = (Inst) {
                     .type = INST_JMP,
                 };
-                vm->program_size += 1;
+                gvm->program_size += 1;
             }
             else if (text_eq(inst_name, text_cstr_as_text("halt"))) {
-                vm->program[vm->program_size] = (Inst) {
+                gvm->program[gvm->program_size] = (Inst) {
                     .type = INST_HALT
                 };
-                vm->program_size += 1;
+                gvm->program_size += 1;
             }
             else {
                 fprintf(stderr, "ERROR: unknown instruction `%.*s`\n", (int) inst_name.count, inst_name.data);
@@ -126,7 +126,7 @@ void GLX_parse_source_into_instructions(GLX_vm *vm, Gasm *gasm, GLX_text source)
 
     for (size_t i = 0; i < gasm->declared_addresses_size; ++i) {
         Word addr = gasm_find_label_addr(gasm, gasm->declared_addresses[i].label);
-        vm->program[gasm->declared_addresses[i].addr].operand = addr;
+        gvm->program[gasm->declared_addresses[i].addr].operand = addr;
     }
 
 }
