@@ -4,7 +4,7 @@
 #include "emulator.h"
 #include "shift_arg.h"
 
-Gvm vm = { 0 };
+Gvm gvm = { 0 };
 
 void usage(FILE *stream, const char *program)
 {
@@ -39,13 +39,13 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    GLX_load_bytecode(&vm, input_file_path);
-    Err err = GLX_execute_program(&vm, GLX_EXECUTION_LIMIT);
+    GLX_load_bytecode(&gvm, input_file_path);
+    Err err = GLX_execute_program(&gvm, GLX_EXECUTION_LIMIT);
     if (err != ERR_OK) {
         usage(stderr, program);
         fprintf(stderr, "ERROR: %s", err_as_cstr(err));
         exit(1);
     }
-    GLX_dump_stack(stdout, &vm);
+    GLX_dump_stack(stdout, &gvm);
     return 0;
 }
