@@ -4,7 +4,7 @@
 #include "emulator.h"
 #include "shift_arg.h"
 
-GLX_vm vm = { 0 };
+Gvm vm = { 0 };
 
 void usage(FILE *stream, const char *program)
 {

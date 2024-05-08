@@ -4,7 +4,7 @@
 #include <string.h>
 #include "emulator.h"
 
-void GLX_load_bytecode(GLX_vm *gm, const char *file_path)
+void GLX_load_bytecode(Gvm *gvm, const char *file_path)
 {
     FILE *f = fopen(file_path, "rb");
     if (f == NULL) {
@@ -24,120 +24,120 @@ void GLX_load_bytecode(GLX_vm *gm, const char *file_path)
         exit(1);
     }
 
-    assert(size % sizeof(gm->program[0]) == 0);
-    assert((size_t)size <= GLX_PROGRAM_CAPACITY * sizeof(gm->program[0]));
+    assert(size % sizeof(gvm->program[0]) == 0);
+    assert((size_t) size <= GLX_PROGRAM_CAPACITY * sizeof(gvm->program[0]));
 
     if (fseek(f, 0, SEEK_SET) < 0) {
         fprintf(stderr, "ERROR: Could not read file `%s`: `%s`\n", file_path, strerror(errno));
         exit(1);
     }
 
-    size_t program_size = fread(gm->program, sizeof(gm->program[0]), size / sizeof(gm->program[0]), f);
+    size_t program_size = fread(gvm->program, sizeof(gvm->program[0]), size / sizeof(gvm->program[0]), f);
 
-    gm->program_size = (Word)program_size;
+    gvm->program_size = (Word) program_size;
 
     fclose(f);
 }
 
-Err GLX_execute_inst(GLX_vm *vm)
+Err GLX_execute_inst(Gvm *gvm)
 {
-    if (vm->ip < 0 || vm->ip >= vm->program_size) {
+    if (gvm->ip < 0 || gvm->ip >= gvm->program_size) {
         return ERR_ILLEGAL_INST_ACCESS;
     }
 
-    Inst inst = vm->program[vm->ip];
+    Inst inst = gvm->program[gvm->ip];
 
     switch (inst.type) {
-        case INST_NOP:vm->ip += 1;
+        case INST_NOP:gvm->ip += 1;
             break;
         case INST_PUSH:
-            if (vm->stack_size >= GLX_STACK_CAPACITY) {
+            if (gvm->stack_size >= GLX_STACK_CAPACITY) {
                 return ERR_STACK_OVERFLOW;
             }
-            vm->stack[vm->stack_size] = inst.operand;
-            vm->stack_size += 1;
-            vm->ip += 1;
+            gvm->stack[gvm->stack_size] = inst.operand;
+            gvm->stack_size += 1;
+            gvm->ip += 1;
             break;
 
         case INST_PLUS:
-            if (vm->stack_size < 1) {
+            if (gvm->stack_size < 1) {
                 return ERR_STACK_UNDERFLOW;
             }
-            vm->stack[vm->stack_size - 2] += vm->stack[vm->stack_size - 1];
-            vm->stack_size -= 1;
-            vm->ip += 1;
+            gvm->stack[gvm->stack_size - 2] += gvm->stack[gvm->stack_size - 1];
+            gvm->stack_size -= 1;
+            gvm->ip += 1;
             break;
 
         case INST_MINUS:
-            if (vm->stack_size < 1) {
+            if (gvm->stack_size < 1) {
                 return ERR_STACK_UNDERFLOW;
             }
-            vm->stack[vm->stack_size - 2] -= vm->stack[vm->stack_size - 1];
-            vm->stack_size -= 1;
-            vm->ip += 1;
+            gvm->stack[gvm->stack_size - 2] -= gvm->stack[gvm->stack_size - 1];
+            gvm->stack_size -= 1;
+            gvm->ip += 1;
             break;
 
         case INST_MULT:
-            if (vm->stack_size < 1) {
+            if (gvm->stack_size < 1) {
                 return ERR_STACK_UNDERFLOW;
             }
-            vm->stack[vm->stack_size - 2] *= vm->stack[vm->stack_size - 1];
-            vm->stack_size -= 1;
-            vm->ip += 1;
+            gvm->stack[gvm->stack_size - 2] *= gvm->stack[gvm->stack_size - 1];
+            gvm->stack_size -= 1;
+            gvm->ip += 1;
             break;
 
         case INST_DIV:
-            if (vm->stack_size < 1) {
+            if (gvm->stack_size < 1) {
                 return ERR_STACK_UNDERFLOW;
             }
-            if (vm->stack[vm->stack_size - 1] == 0) {
+            if (gvm->stack[gvm->stack_size - 1] == 0) {
                 return ERR_DIV_BY_ZERO;
             }
-            vm->stack[vm->stack_size - 2] /= vm->stack[vm->stack_size - 1];
-            vm->stack_size -= 1;
-            vm->ip += 1;
+            gvm->stack[gvm->stack_size - 2] /= gvm->stack[gvm->stack_size - 1];
+            gvm->stack_size -= 1;
+            gvm->ip += 1;
             break;
 
         case INST_EQ:
-            if (vm->stack_size < 1) {
+            if (gvm->stack_size < 1) {
                 return ERR_STACK_UNDERFLOW;
             }
-            vm->stack[vm->stack_size - 2] = vm->stack[vm->stack_size - 1] == vm->stack[vm->stack_size - 2];
-            vm->stack_size -= 1;
-            vm->ip += 1;
+            gvm->stack[gvm->stack_size - 2] = gvm->stack[gvm->stack_size - 1] == gvm->stack[gvm->stack_size - 2];
+            gvm->stack_size -= 1;
+            gvm->ip += 1;
             break;
 
         case INST_JMP_IF:
-            if (vm->stack_size < 1) {
+            if (gvm->stack_size < 1) {
                 return ERR_STACK_UNDERFLOW;
             }
 
-            if (vm->stack[vm->stack_size - 1]) {
-                vm->stack_size -= 1;
-                vm->ip = inst.operand;
+            if (gvm->stack[gvm->stack_size - 1]) {
+                gvm->stack_size -= 1;
+                gvm->ip = inst.operand;
             }
             else {
-                vm->ip++;
+                gvm->ip++;
             }
             break;
 
-        case INST_JMP:vm->ip = inst.operand;
+        case INST_JMP:gvm->ip = inst.operand;
             break;
 
-        case INST_HALT:vm->halt = 1;
+        case INST_HALT:gvm->halt = 1;
             break;
 
         case INST_WRITE:
-            if (vm->stack_size < 1) {
+            if (gvm->stack_size < 1) {
                 return ERR_STACK_UNDERFLOW;
             }
-            printf("%lld", vm->stack[vm->stack_size - 1]);
-            vm->stack_size -= 1;
-            vm->ip += 1;
+            printf("%lld", gvm->stack[gvm->stack_size - 1]);
+            gvm->stack_size -= 1;
+            gvm->ip += 1;
             break;
 
         case INST_DUP:
-            if (vm->stack_size - inst.operand <= 0) {
+            if (gvm->stack_size - inst.operand <= 0) {
                 return ERR_STACK_UNDERFLOW;
             }
 
@@ -145,10 +145,10 @@ Err GLX_execute_inst(GLX_vm *vm)
                 return ERR_ILLEGAL_OPERAND;
             }
 
-            vm->stack[vm->stack_size] = vm->stack[vm->stack_size - 1 - inst.operand];
+            gvm->stack[gvm->stack_size] = gvm->stack[gvm->stack_size - 1 - inst.operand];
 
-            vm->stack_size += 1;
-            vm->ip += 1;
+            gvm->stack_size += 1;
+            gvm->ip += 1;
             break;
 
         default:return ERR_ILLEGAL_INST;
@@ -156,10 +156,10 @@ Err GLX_execute_inst(GLX_vm *vm)
     return ERR_OK;
 }
 
-Err GLX_execute_program(GLX_vm *vm, int limit)
+Err GLX_execute_program(Gvm *gvm, int limit)
 {
-    while (limit != 0 && !vm->halt) {
-        Err err = GLX_execute_inst(vm);
+    while (limit != 0 && !gvm->halt) {
+        Err err = GLX_execute_inst(gvm);
         if (err != ERR_OK) {
             return err;
         }
@@ -170,12 +170,12 @@ Err GLX_execute_program(GLX_vm *vm, int limit)
     return ERR_OK;
 }
 
-void GLX_dump_stack(FILE *stream, GLX_vm *gm)
+void GLX_dump_stack(FILE *stream, Gvm *gvm)
 {
     fprintf(stream, "[STACK]:\n");
-    if (gm->stack_size > 0) {
-        for (Word i = 0; i < gm->stack_size; ++i) {
-            fprintf(stream, "  %lld\n", gm->stack[i]);
+    if (gvm->stack_size > 0) {
+        for (Word i = 0; i < gvm->stack_size; ++i) {
+            fprintf(stream, "  %lld\n", gvm->stack[i]);
         }
     }
     else {

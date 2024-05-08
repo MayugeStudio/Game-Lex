@@ -3,7 +3,7 @@
 #include "text.h"
 #include "assembler.h"
 
-GLX_vm vm = { 0 };
+Gvm vm = { 0 };
 
 Gasm lasm = { 0 };
 
