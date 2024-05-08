@@ -24,4 +24,4 @@ target_link_libraries(gle PRIVATE GLX_COMMON_LIB)
 
 enable_testing()
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests)

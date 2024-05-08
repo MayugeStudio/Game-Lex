@@ -1,15 +1,15 @@
 enable_testing()
 
-set(EXAMPLE_1_ASM ${GLEX_DIR}/examples/1_123.gla)
-set(EXAMPLE_1_BIN ${GLEX_DIR}/examples/1_123.glb)
+set(EXAMPLE_1_ASM ${GLEX_DIR}/tests/1_123.gla)
+set(EXAMPLE_1_BIN ${GLEX_DIR}/tests/1_123.glb)
 set(EXAMPLE_1 ${EXAMPLE_1_ASM} ${EXAMPLE_1_BIN})
 
-set(EXAMPLE_2_ASM ${GLEX_DIR}/examples/2_comments.gla)
-set(EXAMPLE_2_BIN ${GLEX_DIR}/examples/2_comments.glb)
+set(EXAMPLE_2_ASM ${GLEX_DIR}/tests/2_comments.gla)
+set(EXAMPLE_2_BIN ${GLEX_DIR}/tests/2_comments.glb)
 set(EXAMPLE_2 ${EXAMPLE_2_ASM} ${EXAMPLE_2_BIN})
 
-set(EXAMPLE_3_ASM ${GLEX_DIR}/examples/3_fibs.gla)
-set(EXAMPLE_3_BIN ${GLEX_DIR}/examples/3_fibs.glb)
+set(EXAMPLE_3_ASM ${GLEX_DIR}/tests/3_fibs.gla)
+set(EXAMPLE_3_BIN ${GLEX_DIR}/tests/3_fibs.glb)
 set(EXAMPLE_3 ${EXAMPLE_3_ASM} ${EXAMPLE_3_BIN})
 
 add_test(NAME assembly-test-1 COMMAND ${GLEX_DIR}/bin/gla.exe ${EXAMPLE_1}) # TODO RENAME assembly to assembler
