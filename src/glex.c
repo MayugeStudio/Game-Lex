@@ -20,11 +20,11 @@ void gasm_push_label(Gasm *gasm, const GLX_text name, const Word addr)
     gasm->labels_size += 1;
 }
 
-void gasm_push_deferred_operand(Gasm *gasm, const Word addr, const GLX_text label)
+void gasm_push_declared_addr(Gasm *gasm, Word addr, GLX_text label)
 {
-    assert(gasm->deferred_operands_size < DEFERRED_OPERANDS_CAPACITY);
-    gasm->deferred_operands[gasm->deferred_operands_size] = (Deferred_Operand) { .addr = addr, .label = label };
-    gasm->deferred_operands_size += 1;
+    assert(gasm->declared_addresses_size < DEFERRED_OPERANDS_CAPACITY);
+    gasm->declared_addresses[gasm->declared_addresses_size] = (Declared_Addr) { .addr = addr, .label = label };
+    gasm->declared_addresses_size += 1;
 }
 
 const char *err_as_cstr(Err err)

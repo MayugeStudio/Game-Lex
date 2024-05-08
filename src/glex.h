@@ -66,20 +66,20 @@ typedef struct
 {
     Word addr;
     GLX_text label;
-} Deferred_Operand;
+} Declared_Addr;
 
 typedef struct
 {
     Label labels[GLX_LABEL_CAPACITY];
     size_t labels_size;
 
-    Deferred_Operand deferred_operands[DEFERRED_OPERANDS_CAPACITY];
-    size_t deferred_operands_size;
+    Declared_Addr declared_addresses[DEFERRED_OPERANDS_CAPACITY];
+    size_t declared_addresses_size;
 } Gasm;
 
 Word gasm_find_label_addr(const Gasm *gasm, GLX_text name);
-void gasm_push_label(Gasm *gasm, const GLX_text name, const Word addr);
-void gasm_push_deferred_operand(Gasm *gasm, Word addr, GLX_text label);
+void gasm_push_label(Gasm *gasm, GLX_text name, Word addr);
+void gasm_push_declared_addr(Gasm *gasm, Word addr, GLX_text label);
 
 const char *err_as_cstr(Err err);
 

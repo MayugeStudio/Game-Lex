@@ -105,7 +105,7 @@ void GLX_parse_source_into_instructions(GLX_vm *vm, Gasm *gasm, GLX_text source)
                 vm->program_size += 1;
             }
             else if (text_eq(inst_name, text_cstr_as_text("jmp"))) {
-                gasm_push_deferred_operand(gasm, vm->program_size, operand);
+                gasm_push_declared_addr(gasm, vm->program_size, operand);
                 vm->program[vm->program_size] = (Inst) {
                     .type = INST_JMP,
                 };
@@ -124,9 +124,9 @@ void GLX_parse_source_into_instructions(GLX_vm *vm, Gasm *gasm, GLX_text source)
         }
     }
 
-    for (size_t i = 0; i < gasm->deferred_operands_size; ++i) {
-        Word addr = gasm_find_label_addr(gasm, gasm->deferred_operands[i].label);
-        vm->program[gasm->deferred_operands[i].addr].operand = addr;
+    for (size_t i = 0; i < gasm->declared_addresses_size; ++i) {
+        Word addr = gasm_find_label_addr(gasm, gasm->declared_addresses[i].label);
+        vm->program[gasm->declared_addresses[i].addr].operand = addr;
     }
 
 }
